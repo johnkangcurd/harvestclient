@@ -1,6 +1,8 @@
 package com.enonic.harvest.harvestclient.models;
 
 import com.enonic.harvest.harvestclient.exceptions.HarvestClientException;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -11,77 +13,77 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
-@XmlRootElement(name = "project")
-@XmlAccessorType(XmlAccessType.NONE)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Project
 {
 
-    @XmlElement(name = "name")
+    @JsonProperty("name")
     private String name;
 
-    @XmlElement(name = "id")
+    @JsonProperty("id")
     private Integer id;
 
-    @XmlElement(name = "client-id")
+    @JsonProperty("client_id")
     private Integer clientId;
 
-    @XmlElement(name = "code")
+    @JsonProperty("code")
     private String code;
 
-    @XmlElement(name = "active")
+    @JsonProperty("active")
     private boolean active;
 
-    @XmlElement(name = "notes")
+    @JsonProperty("notes")
     private String notes;
 
-    @XmlElement(name = "billable")
+    @JsonProperty("billable")
     private boolean billable;
 
-    @XmlElement(name = "bill-by")
+    @JsonProperty("bill_by")
     private String billBy;
 
-    @XmlElement(name = "hourly-rate")
+    @JsonProperty("hourly_rate")
     private BigDecimal hourlyRate;
 
-    @XmlElement(name = "budget-by")
+    @JsonProperty("budget_by")
     private String budgetBy;
 
-    @XmlElement(name = "budget")
+    @JsonProperty("budget")
     private BigDecimal budget;
 
-    @XmlElement(name = "updated-at")
+    @JsonProperty("updated_at")
     private Date updatedAt;
 
-    @XmlElement(name = "created-at")
+    @JsonProperty("created_at")
     private Date createdAt;
 
-    @XmlElement(name = "cost-budget")
+    @JsonProperty("cost_budget")
     private BigDecimal costBudget;
 
-    @XmlElement(name = "cost-budget-include-expenses")
+    @JsonProperty("cost_budget_include_expenses")
     private boolean costBudgetIncludeExpenses;
 
-    @XmlElement(name = "notify-when-over-budget")
+    @JsonProperty("notify_when_over_budget")
     private boolean notifyWhenOverBudget;
 
-    @XmlElement(name = "over-budget-notification-percentage")
+    @JsonProperty("over_budget_notification_percentage")
     private BigDecimal overBudgetNotificationPercentage;
 
-    @XmlElement(name = "over-budget-notified-at")
+    @JsonProperty("over_budget_notified_at")
     private Date overBudgetNotifiedAt;
 
-    @XmlElement(name = "show-budget-to-all")
+    @JsonProperty("show_budget_to_all")
     private boolean showBudgetToAll;
 
-    @XmlElement(name = "hint-earliest-record-at")
+    @JsonProperty("hint_earliest_record_at")
     private Date hintEarliestRecordAt;
 
-    @XmlElement(name = "hint-latest-record-at")
+    @JsonProperty("hint_latest_record_at")
     private Date hintLatestRecordAt;
 
-    private UserAssignmentCollection userAssignments;
-    private TaskAssignmentCollection taskAssignments;
+    private List<UserAssignment> userAssignments;
+    private List<TaskAssignment> taskAssignments;
 
     public String getName()
     {
@@ -213,23 +215,19 @@ public class Project
         this.budget = budget;
     }
 
-    public UserAssignmentCollection getUserAssignments()
-    {
+    public List<UserAssignment> getUserAssignments() {
         return userAssignments;
     }
 
-    public void setUserAssignments(UserAssignmentCollection userAssignments)
-    {
+    public void setUserAssignments(List<UserAssignment> userAssignments) {
         this.userAssignments = userAssignments;
     }
 
-    public TaskAssignmentCollection getTaskAssignments()
-    {
+    public List<TaskAssignment> getTaskAssignments() {
         return taskAssignments;
     }
 
-    public void setTaskAssignments(TaskAssignmentCollection taskAssignments)
-    {
+    public void setTaskAssignments(List<TaskAssignment> taskAssignments) {
         this.taskAssignments = taskAssignments;
     }
 

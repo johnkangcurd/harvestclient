@@ -2,21 +2,23 @@ package com.enonic.harvest.harvestclient;
 
 import com.enonic.harvest.harvestclient.exceptions.HarvestClientException;
 import com.enonic.harvest.harvestclient.exceptions.MissingParameterException;
+import com.enonic.harvest.harvestclient.models.*;
+import com.enonic.harvest.harvestclient.models.Client;
+import com.enonic.harvest.harvestclient.parameters.GetDayEntriesByProjectParameters;
 import com.enonic.harvest.harvestclient.parameters.GetDayEntriesByUserParameters;
 import com.enonic.harvest.harvestclient.parameters.GetRecentInvoicesParameters;
-import com.enonic.harvest.harvestclient.parameters.GetDayEntriesByProjectParameters;
-import com.enonic.harvest.harvestclient.models.*;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.message.BasicNameValuePair;
 
-import java.io.InputStream;
+import javax.ws.rs.client.*;
+import javax.ws.rs.core.*;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 class DefaultHarvestClient
         implements HarvestClient
@@ -35,315 +37,412 @@ class DefaultHarvestClient
         this.subDomain = subDomain;
     }
 
-    @Override
-    public UserCollection getUsers()
+    public List<User> getUsers()
             throws HarvestClientException
     {
-        return UserCollection.fromInputStream(this.getInputStream("/people"));
+        final UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
+                .path("people");
+        URI uri = builder.build();
+        Response response = this.requestData(uri);
+        return response.readEntity(new GenericType<List<UserHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    @Override
-    public UserCollection getUsers(Date updatedSince)
+    public List<User> getUsers(Date updatedSince)
             throws HarvestClientException
     {
-        String updatedSinceUrlString;
-        try
-        {
-            updatedSinceUrlString = URLEncoder.encode(this.dateTimeFormatter.format(updatedSince), "utf-8");
-        }
-        catch (UnsupportedEncodingException e)
-        {
-            throw new HarvestClientException("Unsupported encoding.", e);
-        }
-        return UserCollection.fromInputStream(this.getInputStream("/people?updated_since=%s", updatedSinceUrlString));
+        final UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
+                .path("people")
+                .queryParam("updated_since", encodeDate(updatedSince, "utf-8"));
+        URI uri = builder.build();
+        Response response = this.requestData(uri);
+        return response.readEntity(new GenericType<List<UserHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    @Override
     public User getUser(int id)
             throws HarvestClientException
     {
-        return User.fromInputStream(this.getInputStream("/people/%s", id));
+        final UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
+                .path("people/{userId}");
+        URI uri = builder.build(id);
+        Response response = this.requestData(uri);
+        return response.readEntity(User.class);
     }
 
-    @Override
-    public ClientCollection getClients()
+    public List<Client> getClients()
             throws HarvestClientException
     {
-        return ClientCollection.fromInputStream(this.getInputStream("/clients"));
+        final UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
+
+                .path("clients");
+        URI uri = builder.build();
+        Response response = this.requestData(uri);
+        return response.readEntity(new GenericType<List<ClientHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    @Override
-    public ClientCollection getClients(Date updatedSince)
+    private <T> List<T> extractListFromHolderList(List<Holder> holderList){
+        List<T> list = new ArrayList<>();
+        for(Holder h : holderList){
+            list.add((T) h.getEntity());
+        }
+        return list;
+    }
+
+    public List<Client> getClients(Date updatedSince)
             throws HarvestClientException
     {
-        String updatedSinceUrlString;
-        try
-        {
-            updatedSinceUrlString = URLEncoder.encode(this.dateTimeFormatter.format(updatedSince), "utf-8");
-        }
-        catch (UnsupportedEncodingException e)
-        {
-            throw new HarvestClientException("Unsupported encoding.", e);
-        }
-        return ClientCollection.fromInputStream(this.getInputStream("/clients?updated_since=%s", updatedSinceUrlString));
+        final UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
+                .path("clients")
+                .queryParam("updated_since", encodeDate(updatedSince, "utf-8"));
+        URI uri = builder.build();
+        System.out.println(uri.toString());
+        Response response = this.requestData(uri);
+        return response.readEntity(new GenericType<List<ClientHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    @Override
     public Client getClient(int id)
             throws HarvestClientException
     {
-        return Client.fromInputStream(this.getInputStream("/clients/%s", id));
+        final UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
+                .path("clients/{clientId}");
+        URI uri = builder.build(id);
+        Response response = this.requestData(uri);
+        return response.readEntity(Client.class);
     }
 
-    @Override
-    public DayEntryCollection getDayEntriesByUser(GetDayEntriesByUserParameters params)
+    public List<DayEntry> getDayEntriesByUser(GetDayEntriesByUserParameters params)
             throws HarvestClientException
     {
         if (params.fromDate == null)
             throw new MissingParameterException("fromDate");
         if (params.toDate == null)
             throw new MissingParameterException("toDate");
+        if (params.userId == null)
+            throw new MissingParameterException("userId");
 
-        List<NameValuePair> urlParams = new ArrayList<NameValuePair>();
-        urlParams.add(new BasicNameValuePair("from", this.dateFormatter.format(params.fromDate)));
-        urlParams.add(new BasicNameValuePair("to", this.dateFormatter.format(params.toDate)));
+        final UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
+                .path("people/{userId}/entries")
+                .queryParam("from", this.dateFormatter.format(params.fromDate))
+                .queryParam("to", this.dateFormatter.format(params.toDate));
 
         if (params.updatedSince != null)
         {
-            urlParams.add(new BasicNameValuePair("updated_since", this.dateTimeFormatter.format(params.updatedSince)));
+            builder.queryParam("updated_since", this.dateFormatter.format(params.updatedSince));
         }
-
-        String urlParamString = URLEncodedUtils.format(urlParams, "utf-8");
-
-        return DayEntryCollection.fromInputStream(this.getInputStream("/people/%s/entries?%s", params.userId, urlParamString));
+        URI uri = builder.build(params.userId);
+        Response response = this.requestData(uri);
+        return response.readEntity(new GenericType<List<DayEntryHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    @Override
-    public DayEntryCollection getDayEntriesByProject(GetDayEntriesByProjectParameters params)
+    public List<DayEntry> getDayEntriesByProject(GetDayEntriesByProjectParameters params)
             throws HarvestClientException
     {
         if (params.fromDate == null)
             throw new MissingParameterException("fromDate");
         if (params.toDate == null)
             throw new MissingParameterException("toDate");
+        if (params.projectId == null)
+            throw new MissingParameterException("projectId");
 
-        List<NameValuePair> urlParams = new ArrayList<NameValuePair>();
-        urlParams.add(new BasicNameValuePair("from", this.dateFormatter.format(params.fromDate)));
-        urlParams.add(new BasicNameValuePair("to", this.dateFormatter.format(params.toDate)));
+        final UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
+                .path("projects/{projectId}/entries")
+                .queryParam("from", this.dateFormatter.format(params.fromDate))
+                .queryParam("to", this.dateFormatter.format(params.toDate));
 
         if (params.updatedSince != null)
         {
-            urlParams.add(new BasicNameValuePair("updated_since", this.dateTimeFormatter.format(params.updatedSince)));
+            builder.queryParam("updated_since", this.dateTimeFormatter.format(params.updatedSince));
         }
 
-        String urlParamString = URLEncodedUtils.format(urlParams, "utf-8");
-
-        return DayEntryCollection.fromInputStream(this.getInputStream("/projects/%s/entries?%s", params.projectId, urlParamString));
+        URI uri = builder.build(params.projectId);
+        Response response = this.requestData(uri);
+        return response.readEntity(new GenericType<List<DayEntryHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    @Override
-    public ProjectCollection getProjects()
+    public List<Project> getProjects()
             throws HarvestClientException
     {
-        return ProjectCollection.fromInputStream(this.getInputStream("/projects"));
+        final UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
+
+                .path("projects");
+        URI uri = builder.build();
+        Response response = this.requestData(uri);
+        return response.readEntity(new GenericType<List<ProjectHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    @Override
-    public ProjectCollection getProjects(Date updatedSince)
+    public List<Project> getProjects(Date updatedSince)
             throws HarvestClientException
     {
-        String updatedSinceUrlString;
-        try
-        {
-            updatedSinceUrlString = URLEncoder.encode(this.dateTimeFormatter.format(updatedSince), "utf-8");
-        }
-        catch (UnsupportedEncodingException e)
-        {
-            throw new HarvestClientException("Unsupported encoding.", e);
-        }
-        return ProjectCollection.fromInputStream(this.getInputStream("/projects?updated_since=%s", updatedSinceUrlString));
+        final UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
+                .path("projects")
+                .queryParam("updated_since", encodeDate(updatedSince, "utf-8"));
+        URI uri = builder.build();
+
+        Response response = this.requestData(uri);
+        return response.readEntity(new GenericType<List<ProjectHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    @Override
-    public ProjectCollection getProjects(int clientId)
+    public List<Project> getProjects(int clientId)
             throws HarvestClientException
     {
-        return ProjectCollection.fromInputStream(this.getInputStream("/projects?client=%s", clientId));
+        final UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
+                .path("projects")
+                .queryParam("client", clientId);
+        URI uri = builder.build();
+
+        Response response = this.requestData(uri);
+        return response.readEntity(new GenericType<List<ProjectHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    @Override
-    public ProjectCollection getProjects(int clientId, Date updatedSince)
+    public List<Project> getProjects(int clientId, Date updatedSince)
             throws HarvestClientException
     {
-        String updatedSinceUrlString;
-        try
-        {
-            updatedSinceUrlString = URLEncoder.encode(this.dateTimeFormatter.format(updatedSince), "utf-8");
-        }
-        catch (UnsupportedEncodingException e)
-        {
-            throw new HarvestClientException("Unsupported encoding.", e);
-        }
-        return ProjectCollection.fromInputStream(this.getInputStream("/projects?client=%s&updated_since=%s", clientId, updatedSinceUrlString));
+        final UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
+                .path("projects")
+                .queryParam("client", clientId)
+                .queryParam("updated_since", encodeDate(updatedSince, "utf-8"));
+        URI uri = builder.build();
+
+        Response response = this.requestData(uri);
+        return response.readEntity(new GenericType<List<ProjectHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
+
     }
 
-    @Override
     public Project getProject(int id)
             throws HarvestClientException
     {
-        return Project.fromInputStream(this.getInputStream("/projects/%s", id));
+        final UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
+
+                .path("projects/{projectId}");
+        URI uri = builder.build(id);
+        Response response = this.requestData(uri);
+        return response.readEntity(Project.class);
     }
 
-    @Override
-    public UserAssignmentCollection getUserAssignments(int projectId)
+    public List<UserAssignment> getUserAssignments(int projectId)
             throws HarvestClientException
     {
-        return UserAssignmentCollection.fromInputStream(this.getInputStream("/projects/%s/user_assignments", projectId));
+        final UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
+
+                .path("projects/{projectId}/user_assignments");
+        URI uri = builder.build(projectId);
+        Response response = this.requestData(uri);
+        return response.readEntity(new GenericType<List<UserAssigmentHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    @Override
-    public UserAssignmentCollection getUserAssignments(int projectId, Date updatedSince)
+    public List<UserAssignment> getUserAssignments(int projectId, Date updatedSince)
             throws HarvestClientException
     {
-        String updatedSinceUrlString;
-        try
-        {
-            updatedSinceUrlString = URLEncoder.encode(this.dateTimeFormatter.format(updatedSince), "utf-8");
-        }
-        catch (UnsupportedEncodingException e)
-        {
-            throw new HarvestClientException("Unsupported encoding.", e);
-        }
-        return UserAssignmentCollection.fromInputStream(this.getInputStream("/projects/%s/user_assignments?updated_since=%s", projectId, updatedSinceUrlString));
+        final UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
+
+                .path("projects/{projectId}/user_assignments");
+        builder.queryParam("updated_since", encodeDate(updatedSince, "utf-8"));
+        URI uri = builder.build(projectId);
+        Response response = this.requestData(uri);
+        return response.readEntity(new GenericType<List<UserAssigmentHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    @Override
-    public TaskCollection getTasks()
+    public List<Task> getTasks()
             throws HarvestClientException
     {
-        return TaskCollection.fromInputStream(this.getInputStream("/tasks"));
+        final UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
+
+                .path("tasks");
+        URI uri = builder.build();
+        Response response = this.requestData(uri);
+        return response.readEntity(new GenericType<List<TaskHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    @Override
-    public TaskCollection getTasks(Date updatedSince)
+    public List<Task> getTasks(Date updatedSince)
             throws HarvestClientException
     {
-        String updatedSinceUrlString;
-        try
-        {
-            updatedSinceUrlString = URLEncoder.encode(this.dateTimeFormatter.format(updatedSince), "utf-8");
-        }
-        catch (UnsupportedEncodingException e)
-        {
-            throw new HarvestClientException("Unsupported encoding.", e);
-        }
-        return TaskCollection.fromInputStream(this.getInputStream("/tasks?updated_since=%s", updatedSinceUrlString));
+        final UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
+
+                .path("tasks")
+                .queryParam("updated_since", encodeDate(updatedSince, "utf-8"));
+        URI uri = builder.build();
+        Response response = this.requestData(uri);
+        return response.readEntity(new GenericType<List<TaskHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    @Override
     public Task getTask(int id)
             throws HarvestClientException
     {
-        return Task.fromInputStream(this.getInputStream("/tasks/%s", id));
+        final UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
+
+                .path("tasks/{taskId}");
+        URI uri = builder.build(id);
+        Response response = this.requestData(uri);
+        return response.readEntity(Task.class);
     }
 
-    @Override
-    public TaskAssignmentCollection getTaskAssignments(int projectId)
+    public List<TaskAssignment> getTaskAssignments(int projectId)
             throws HarvestClientException
     {
-        return TaskAssignmentCollection.fromInputStream(this.getInputStream("/projects/%s/task_assignments", projectId));
+        UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
+
+                .path("projects/{projectId}/task_assignments");
+        URI uri = builder.build(projectId);
+        Response response = this.requestData(uri);
+        return response.readEntity(new GenericType<List<TaskAssignmentHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    @Override
-    public TaskAssignmentCollection getTaskAssignments(int projectId, Date updatedSince)
+    public List<TaskAssignment> getTaskAssignments(int projectId, Date updatedSince)
             throws HarvestClientException
     {
-        String updatedSinceUrlString;
+        UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
+
+                .path("projects/{projectId}/task_assignments")
+                .queryParam("updated_since", encodeDate(updatedSince, "utf-8"));
+
+        URI uri = builder.build(projectId);
+        Response response = this.requestData(uri);
+        return response.readEntity(new GenericType<List<TaskAssignmentHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public List<Invoice> getRecentInvoices(GetRecentInvoicesParameters params)
+            throws HarvestClientException
+    {
+        UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
+                .path("invoices");
+
+        if (params.page != null)
+            builder.queryParam("page", params.page.toString());
+        if (params.fromDate != null)
+            builder.queryParam("from", this.dateFormatter.format(params.fromDate));
+        if (params.toDate != null)
+            builder.queryParam("to", this.dateFormatter.format(params.toDate));
+        if (params.updatedSince != null)
+            builder.queryParam("updated_since", this.dateFormatter.format(params.updatedSince));
+        if (params.status != null)
+            builder.queryParam("status", params.status);
+        if (params.client != null)
+            builder.queryParam("client", params.client.toString());
+
+        URI uri = builder.build();
+        Response response = this.requestData(uri);
+        return response.readEntity(new GenericType<List<InvoiceHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public Invoice getInvoice(int id)
+            throws HarvestClientException
+    {
+        UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
+
+                .path("invoices/{invoiceId}");
+        URI uri = builder.build(id);
+
+        Response response = this.requestData(uri);
+        return response.readEntity(Invoice.class);
+    }
+
+    public List<InvoiceItemCategory> getInvoiceItemCategories()
+            throws HarvestClientException
+    {
+        UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
+
+                .path("invoice_item_categories");
+        URI uri = builder.build();
+        Response response = this.requestData(uri);
+        return response.readEntity(new GenericType<List<InvoiceItemCategoryHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public List<InvoiceMessage> getInvoiceMessages(int invoiceId)
+            throws HarvestClientException
+    {
+        UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
+
+                .path("invoices/{invoiceId}/messages");
+        URI uri = builder.build(invoiceId);
+        Response response = this.requestData(uri);
+        return response.readEntity(new GenericType<List<InvoiceMessageHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public InvoiceMessage getInvoiceMessage(int invoiceId, int id)
+            throws  HarvestClientException
+    {
+        UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
+
+                .path("invoices/{invoiceId}/messages/{messageId}");
+        URI uri = builder.build(invoiceId, id);
+        Response response = this.requestData(uri);
+        return response.readEntity(InvoiceMessage.class);
+    }
+
+    public List<InvoicePayment> getInvoicePayments(int invoiceId)
+            throws HarvestClientException
+    {
+        UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
+
+                .path("invoices/{invoiceId}/payments");
+        URI uri = builder.build(invoiceId);
+        Response response = this.requestData(uri);
+        return response.readEntity(new GenericType<List<InvoicePaymentHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public InvoicePayment getInvoicePayment(int invoiceId, int id)
+            throws HarvestClientException
+    {
+        UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
+
+                .path("invoices/{invoiceId}/payments/{paymentId}");
+        URI uri = builder.build(invoiceId, id);
+        Response response = this.requestData(uri);
+        return response.readEntity(InvoicePayment.class);
+    }
+
+    private Response requestData(URI uri)
+            throws HarvestClientException
+    {
+        final javax.ws.rs.client.Client client = ClientBuilder.newClient();
+        final WebTarget webTarget = client.target(uri);
+        final Invocation.Builder request = webTarget.request(MediaType.APPLICATION_JSON)
+            .header("Authorization", getAuthenticationHeader());
+        return request.get();
+    }
+
+    private String getBaseUrl(){
+        return  "https://"+getSubDomain()+".harvestapp.com/";
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getSubDomain() {
+        return subDomain;
+    }
+
+    public void setSubDomain(String subDomain) {
+        this.subDomain = subDomain;
+    }
+
+    private String getAuthenticationHeader() {
+        String credentials = this.getUsername() + ":" + this.getPassword();
+        return "Basic " + Base64.getEncoder().encodeToString(credentials.getBytes());
+    }
+
+    private String encodeDate(Date dateToEncode, String encoding){
+        String encodedDate;
         try
         {
-            updatedSinceUrlString = URLEncoder.encode(this.dateTimeFormatter.format(updatedSince), "utf-8");
+            encodedDate = URLEncoder.encode(this.dateTimeFormatter.format(dateToEncode), encoding);
         }
         catch (UnsupportedEncodingException e)
         {
             throw new HarvestClientException("Unsupported encoding.", e);
         }
-        return TaskAssignmentCollection.fromInputStream(this.getInputStream("/projects/%s/task_assignments?updated_since=%s", projectId, updatedSinceUrlString));
-    }
-
-    @Override
-    public InvoiceCollection getRecentInvoices(GetRecentInvoicesParameters params)
-            throws HarvestClientException
-    {
-        List<NameValuePair> urlParams = new ArrayList<NameValuePair>();
-
-        if (params.page != null)
-            urlParams.add(new BasicNameValuePair("page", params.page.toString()));
-        if (params.fromDate != null)
-            urlParams.add(new BasicNameValuePair("from", this.dateFormatter.format(params.fromDate)));
-        if (params.toDate != null)
-            urlParams.add(new BasicNameValuePair("to", this.dateFormatter.format(params.toDate)));
-        if (params.updatedSince != null)
-            urlParams.add(new BasicNameValuePair("updated_since", this.dateFormatter.format(params.updatedSince)));
-        if (params.status != null)
-            urlParams.add(new BasicNameValuePair("status", params.status));
-        if (params.client != null)
-            urlParams.add(new BasicNameValuePair("client", params.client.toString()));
-
-        String urlParamString = URLEncodedUtils.format(urlParams, "utf-8");
-
-        return InvoiceCollection.fromInputStream(this.getInputStream("/invoices?%s", urlParamString));
-    }
-
-    @Override
-    public Invoice getInvoice(int id)
-            throws HarvestClientException
-    {
-        return Invoice.fromInputStream(this.getInputStream("/invoices/%s", id));
-    }
-
-    @Override
-    public InvoiceItemCategoryCollection getInvoiceItemCategories()
-            throws HarvestClientException
-    {
-        return InvoiceItemCategoryCollection.fromInputStream(this.getInputStream("/invoice_item_categories"));
-    }
-
-    @Override
-    public InvoiceMessageCollection getInvoiceMessages(int invoiceId)
-            throws HarvestClientException
-    {
-        return InvoiceMessageCollection.fromInputStream(this.getInputStream("/invoices/%s/messages", invoiceId));
-    }
-
-    @Override
-    public InvoiceMessage getInvoiceMessage(int invoiceId, int id)
-            throws  HarvestClientException
-    {
-        return InvoiceMessage.fromInputStream(this.getInputStream("/invoices/%s/messages/%s", invoiceId, id));
-    }
-
-    @Override
-    public InvoicePaymentCollection getInvoicePayments(int invoiceId)
-            throws HarvestClientException
-    {
-        return InvoicePaymentCollection.fromInputStream(this.getInputStream("/invoices/%s/payments", invoiceId));
-    }
-
-    @Override
-    public InvoicePayment getInvoicePayment(int invoiceId, int id)
-            throws HarvestClientException
-    {
-        return InvoicePayment.fromInputStream(this.getInputStream("/invoices/%s/payments/%s", invoiceId, id));
-    }
-
-    private InputStream getInputStream(String url, Object... args)
-            throws HarvestClientException
-    {
-        HarvestGetRequest request = new HarvestGetRequest();
-        request.setUrl(String.format(url, args));
-        request.setSubdomain(this.subDomain);
-        request.setUsername(this.username);
-        request.setPassword(this.password);
-        return request.getInputStream();
+        return encodedDate;
     }
 }

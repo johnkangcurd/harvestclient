@@ -1,6 +1,8 @@
 package com.enonic.harvest.harvestclient.models;
 
 import com.enonic.harvest.harvestclient.exceptions.HarvestClientException;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -12,34 +14,34 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.InputStream;
 import java.util.Date;
 
-@XmlAccessorType(XmlAccessType.NONE)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class InvoiceMessage
 {
-    @XmlElement(name = "id")
+    @JsonProperty("id")
     private Integer id;
 
-    @XmlElement(name = "body")
+    @JsonProperty("body")
     private String body;
 
-    @XmlElement(name = "invoice-id")
+    @JsonProperty("invoice_id")
     private Integer invoiceId;
 
-    @XmlElement(name = "send-me-a-copy")
+    @JsonProperty("send_me_a_copy")
     private boolean sendMeACopy;
 
-    @XmlElement(name = "sent-by")
+    @JsonProperty("sent_by")
     private String sentBy;
 
-    @XmlElement(name = "sent-by-email")
+    @JsonProperty("sent_by_email")
     private String sentByEmail;
 
-    @XmlElement(name = "full-recipient-list")
+    @JsonProperty("full_recipient_list")
     private String fullRecipientList;
 
-    @XmlElement(name = "updated-at")
+    @JsonProperty("updated_at")
     private Date updatedAt;
 
-    @XmlElement(name = "created-at")
+    @JsonProperty("created_at")
     private Date createdAt;
 
     public static InvoiceMessage fromInputStream(final InputStream xml)
@@ -51,7 +53,7 @@ public class InvoiceMessage
             Unmarshaller unmarshaller = context.createUnmarshaller();
             Source source = new StreamSource(xml);
             // We have to explicitly tell it what class we want, since we can't have two
-            // classes annotated with @XmlRootElement(name = "invoice-message")
+            // classes annotated with @XmlRootElement("invoice_message")
             // This is due to a bug in the Harvest API for InvoiceMessages using same element
             // name for both the list and the items in it.
             return unmarshaller.unmarshal(source, InvoiceMessage.class).getValue();

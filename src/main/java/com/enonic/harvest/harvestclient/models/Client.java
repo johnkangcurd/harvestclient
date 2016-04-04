@@ -1,6 +1,10 @@
 package com.enonic.harvest.harvestclient.models;
 
 import com.enonic.harvest.harvestclient.exceptions.HarvestClientException;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -11,45 +15,45 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.InputStream;
 import java.util.Date;
 
-@XmlRootElement(name = "client")
-@XmlAccessorType(XmlAccessType.NONE)
+//@JsonRootName(value = "client")  //this is not working as expected
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Client
 {
 
-    @XmlElement(name = "name")
+    @JsonProperty(value = "name")
     private String name;
 
-    @XmlElement(name = "created-at")
+    @JsonProperty(value="created_at")
     private Date createdAt;
 
-    @XmlElement(name = "updated-at")
+    @JsonProperty(value="updated_at")
     private Date updatedAt;
 
-    @XmlElement(name = "highrise-id")
+    @JsonProperty(value="highrise_id")
     private Integer highriseId;
 
-    @XmlElement(name = "id")
+    @JsonProperty(value="id")
     private Integer id;
 
-    @XmlElement(name = "cache-version")
+    @JsonProperty(value="cache_version")
     private Integer cacheVersion;
 
-    @XmlElement(name = "currency")
+    @JsonProperty(value="currency")
     private String currency;
 
-    @XmlElement(name = "active")
+    @JsonProperty(value="active")
     private boolean active;
 
-    @XmlElement(name = "currency-symbol")
+    @JsonProperty(value="currency_symbol")
     private String currencySymbol;
 
-    @XmlElement(name = "details")
+    @JsonProperty(value="details")
     private String details;
 
-    @XmlElement(name = "default-invoice-timeframe")
+    @JsonProperty(value="default_invoice_timeframe")
     private String defaultInvoiceTimeframe;
 
-    @XmlElement(name = "last-invoice-kind")
+    @JsonProperty(value="last_invoice_kind")
     private String lastInvoiceKind;
 
     public String getName()
@@ -170,21 +174,5 @@ public class Client
     public void setLastInvoiceKind(String lastInvoiceKind)
     {
         this.lastInvoiceKind = lastInvoiceKind;
-    }
-
-    public static Client fromInputStream(final InputStream xml)
-            throws HarvestClientException
-    {
-        try
-        {
-            JAXBContext context = JAXBContext.newInstance(Client.class);
-            Unmarshaller unmarshaller = context.createUnmarshaller();
-            return (Client) unmarshaller.unmarshal(xml);
-        }
-        catch (Exception e)
-        {
-            throw new HarvestClientException("Unable to parse XML into Client.", e);
-        }
-
     }
 }

@@ -1,6 +1,8 @@
 package com.enonic.harvest.harvestclient.models;
 
 import com.enonic.harvest.harvestclient.exceptions.HarvestClientException;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -11,26 +13,25 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.InputStream;
 import java.util.Date;
 
-@XmlRootElement(name = "invoice-item-category")
-@XmlAccessorType(XmlAccessType.NONE)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class InvoiceItemCategory
 {
-    @XmlElement(name = "id")
+    @JsonProperty("id")
     private Integer id;
 
-    @XmlElement(name = "name")
+    @JsonProperty("name")
     private String name;
 
-    @XmlElement(name = "use-as-expense")
+    @JsonProperty("use_as_expense")
     private boolean useAsExpense;
 
-    @XmlElement(name = "use-as-service")
+    @JsonProperty("use_as_service")
     private boolean useAsService;
 
-    @XmlElement(name = "updated-at")
+    @JsonProperty("updated_at")
     private Date updatedAt;
 
-    @XmlElement(name = "created-at")
+    @JsonProperty("created_at")
     private Date createdAt;
 
     public static InvoiceItemCategory fromInputStream(final InputStream xml)

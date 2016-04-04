@@ -1,6 +1,8 @@
 package com.enonic.harvest.harvestclient.models;
 
 import com.enonic.harvest.harvestclient.exceptions.HarvestClientException;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -12,35 +14,34 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Date;
 
-@XmlRootElement(name = "payment")
-@XmlAccessorType(XmlAccessType.NONE)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class InvoicePayment
 {
-    @XmlElement(name = "id")
+    @JsonProperty("id")
     private Integer id;
 
-    @XmlElement(name = "amount")
+    @JsonProperty("amount")
     private BigDecimal amount;
 
-    @XmlElement(name = "invoice-id")
+    @JsonProperty("invoice_id")
     private Integer invoiceId;
 
-    @XmlElement(name = "notes")
+    @JsonProperty("notes")
     private String notes;
 
-    @XmlElement(name = "paid-at")
+    @JsonProperty("paid_at")
     private Date paidAt;
 
-    @XmlElement(name = "recorded-by")
+    @JsonProperty("recorded_by")
     private String recordedBy;
 
-    @XmlElement(name = "recorded-by-email")
+    @JsonProperty("recorded_by_email")
     private String recordedByEmail;
 
-    @XmlElement(name = "updated-at")
+    @JsonProperty("updated_at")
     private Date updatedAt;
 
-    @XmlElement(name = "created-at")
+    @JsonProperty("created_at")
     private Date createdAt;
 
     public static InvoicePayment fromInputStream(final InputStream xml)

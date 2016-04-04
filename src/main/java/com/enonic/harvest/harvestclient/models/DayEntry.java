@@ -1,5 +1,8 @@
 package com.enonic.harvest.harvestclient.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -7,41 +10,42 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.math.BigDecimal;
 import java.util.Date;
 
-@XmlAccessorType(XmlAccessType.NONE)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DayEntry
 {
 
-    @XmlElement(name = "hours")
+    @JsonProperty(value = "hours")
     private BigDecimal hours;
 
-    @XmlElement(name = "id")
+    @JsonProperty(value = "id")
     private Integer id;
 
-    @XmlElement(name = "notes")
+    @JsonProperty(value = "notes")
     private String notes;
 
-    @XmlElement(name = "project-id")
+    @JsonProperty(value = "project_id")
     private Integer projectId;
 
-    @XmlElement(name = "spent-at")
+    @JsonProperty(value = "spent_at")
     private Date spentAt;
 
-    @XmlElement(name = "task-id")
+    @JsonProperty(value = "task_id")
     private Integer taskId;
 
-    @XmlElement(name = "user-id")
+    @JsonProperty(value = "user_id")
     private Integer userId;
 
-    @XmlElement(name = "is-billed")
+    @JsonProperty(value = "is_billed")
     private boolean isBilled;
 
-    @XmlElement(name = "is-closed")
+    @JsonProperty(value = "is_closed")
     private boolean isClosed;
 
-    @XmlElement(name = "updated-at")
+    @JsonProperty(value = "updated_at")
     private Date updatedAt;
 
-    @XmlElement(name = "created-at")
+    @JsonProperty(value = "created_at")
     private Date createdAt;
 
     public Date getCreatedAt()

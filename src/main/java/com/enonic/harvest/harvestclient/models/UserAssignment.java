@@ -1,36 +1,39 @@
 package com.enonic.harvest.harvestclient.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import java.math.BigDecimal;
 import java.util.Date;
 
-@XmlAccessorType(XmlAccessType.NONE)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserAssignment
 {
-    @XmlElement(name = "id")
+    @JsonProperty("id")
     private Integer id;
 
-    @XmlElement(name = "user-id")
+    @JsonProperty("user_id")
     private Integer userId;
 
-    @XmlElement(name = "project-id")
+    @JsonProperty("project_id")
     private Integer projectId;
 
-    @XmlElement(name = "deactivated")
+    @JsonProperty("deactivated")
     private boolean deactivated;
 
-    @XmlElement(name = "hourly-rate")
+    @JsonProperty("hourly_rate")
     private BigDecimal hourlyRate;
 
-    @XmlElement(name = "is-project-manager")
+    @JsonProperty("is_project_manager")
     private boolean isProjectManager;
 
-    @XmlElement(name = "updated-at")
+    @JsonProperty("updated_at")
     private Date updatedAt;
 
-    @XmlElement(name = "created-at")
+    @JsonProperty("created_at")
     private Date createdAt;
 
     public Integer getId()

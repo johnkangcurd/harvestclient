@@ -1,6 +1,8 @@
 package com.enonic.harvest.harvestclient.models;
 
 import com.enonic.harvest.harvestclient.exceptions.HarvestClientException;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -12,51 +14,50 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Date;
 
-@XmlRootElement(name = "user")
-@XmlAccessorType(XmlAccessType.NONE)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User
 {
 
-    @XmlElement(name = "id")
+    @JsonProperty("id")
     private Integer id;
 
-    @XmlElement(name = "email")
+    @JsonProperty("email")
     private String email;
 
-    @XmlElement(name = "first-name")
+    @JsonProperty("first_name")
     private String firstName;
 
-    @XmlElement(name = "last-name")
+    @JsonProperty("last_name")
     private String lastName;
 
-    @XmlElement(name = "has-access-to-all-future-projects")
+    @JsonProperty("has_access_to_all_future_projects")
     private boolean hasAccessToAllFutureProjects;
 
-    @XmlElement(name = "default-hourly-rate")
+    @JsonProperty("default_hourly_rate")
     private BigDecimal defaultHourlyRate;
 
-    @XmlElement(name = "is-active")
+    @JsonProperty("is_active")
     private boolean isActive;
 
-    @XmlElement(name = "is-admin")
+    @JsonProperty("is_admin")
     private boolean isAdmin;
 
-    @XmlElement(name = "is-contractor")
+    @JsonProperty("is_contractor")
     private boolean isContractor;
 
-    @XmlElement(name = "telephone")
+    @JsonProperty("telephone")
     private String telephone;
 
-    @XmlElement(name = "department")
+    @JsonProperty("department")
     private String department;
 
-    @XmlElement(name = "timezone")
+    @JsonProperty("timezone")
     private String timezone;
 
-    @XmlElement(name = "updated-at")
+    @JsonProperty("updated_at")
     private Date updatedAt;
 
-    @XmlElement(name = "created-at")
+    @JsonProperty("created_at")
     private Date createdAt;
 
 

@@ -1,6 +1,8 @@
 package com.enonic.harvest.harvestclient.models;
 
 import com.enonic.harvest.harvestclient.exceptions.HarvestClientException;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -12,92 +14,91 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Date;
 
-@XmlRootElement(name = "invoice")
-@XmlAccessorType(XmlAccessType.NONE)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Invoice
 {
-    @XmlElement(name = "id")
+    @JsonProperty("id")
     private Integer id;
 
-    @XmlElement(name = "amount")
+    @JsonProperty("amount")
     private BigDecimal amount;
 
-    @XmlElement(name = "due-amount")
+    @JsonProperty("due_amount")
     private BigDecimal dueAmount;
 
-    @XmlElement(name = "due-at")
+    @JsonProperty("due_at")
     private Date dueAt;
 
-    @XmlElement(name = "due-at-human-format")
+    @JsonProperty("due_at_human_format")
     private String dueAtHumanFormat;
 
-    @XmlElement(name = "period-end")
+    @JsonProperty("period_end")
     private Date periodEnd;
 
-    @XmlElement(name = "period-start")
+    @JsonProperty("period_start")
     private Date periodStart;
 
-    @XmlElement(name = "client-id")
+    @JsonProperty("client_id")
     private Integer clientId;
 
-    @XmlElement(name = "subject")
+    @JsonProperty("subject")
     private Integer subject;
 
-    @XmlElement(name = "currency")
+    @JsonProperty("currency")
     private String currency;
 
-    @XmlElement(name = "issued-at")
+    @JsonProperty("issued_at")
     private Date issuedAt;
 
-    @XmlElement(name = "created-by-id")
+    @JsonProperty("created_by_id")
     private Integer createdById;
 
-    @XmlElement(name = "notes")
+    @JsonProperty("notes")
     private String notes;
 
-    @XmlElement(name = "number")
+    @JsonProperty("number")
     private String number;
 
-    @XmlElement(name = "purchase-order")
+    @JsonProperty("purchase_order")
     private String purchaseOrder;
 
-    @XmlElement(name = "client-key")
+    @JsonProperty("client_key")
     private String clientKey;
 
-    @XmlElement(name = "state")
+    @JsonProperty("state")
     private String state;
 
-    @XmlElement(name = "tax")
+    @JsonProperty("tax")
     private BigDecimal tax;
 
-    @XmlElement(name = "tax2")
+    @JsonProperty("tax2")
     private BigDecimal tax2;
 
-    @XmlElement(name = "tax-amount")
+    @JsonProperty("tax_amount")
     private BigDecimal taxAmount;
 
-    @XmlElement(name = "tax-amount2")
+    @JsonProperty("tax_amount2")
     private BigDecimal taxAmount2;
 
-    @XmlElement(name = "discount-amount")
+    @JsonProperty("discount_amount")
     private BigDecimal discountAmount;
 
-    @XmlElement(name = "discount")
+    @JsonProperty("discount")
     private BigDecimal discount;
 
-    @XmlElement(name = "recurring-invoice-id")
+    @JsonProperty("recurring_invoice_id")
     private Integer recurringInvoiceId;
 
-    @XmlElement(name = "estimate-id")
+    @JsonProperty("estimate_id")
     private Integer estimateId;
 
-    @XmlElement(name = "retainer-id")
+    @JsonProperty("retainer_id")
     private Integer retainerId;
 
-    @XmlElement(name = "updated-at")
+    @JsonProperty("updated_at")
     private Date updatedAt;
 
-    @XmlElement(name = "created-at")
+    @JsonProperty("created_at")
     private Date createdAt;
 
     public static Invoice fromInputStream(final InputStream xml)
