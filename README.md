@@ -1,4 +1,6 @@
-# HarvestClient
+# HarvestClient 2.0
+
+This is a fork from dmmikkel's harvest client.  In contrast this uses the Harvest JSON api vs XML and also won't run into issues with empty datasets being returned from your queries to harvest.
 
 HarvestClient is an easy to use wrapper for the Harvest API.
 
@@ -11,7 +13,7 @@ Example that fetches all users:
 
     HarvestClientFactory factory = new HarvestClientFactory();
     HarvestClient client = factory.create("subdomain", "username", "password");
-    UserCollection users = client.getUsers();
+    List<User> users = client.getUsers();
 
     for (User user : users)
     {
@@ -149,3 +151,7 @@ Will be thrown if a required parameter is missing.
 Will be thrown if the Harvest API throttle is reached.
 
 If you encounter this you should consider caching.
+
+##TODO
+- Simplify api.
+- Fix issue with @JsonRootName annotation
