@@ -6,10 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -18,13 +14,13 @@ import java.util.Date;
 public class InvoicePayment
 {
     @JsonProperty("id")
-    private Integer id;
+    private Long id;
 
     @JsonProperty("amount")
     private BigDecimal amount;
 
     @JsonProperty("invoice_id")
-    private Integer invoiceId;
+    private Long invoiceId;
 
     @JsonProperty("notes")
     private String notes;
@@ -60,12 +56,12 @@ public class InvoicePayment
 
     }
 
-    public Integer getId()
+    public Long getId()
     {
         return id;
     }
 
-    public void setId(Integer id)
+    public void setId(Long id)
     {
         this.id = id;
     }
@@ -80,12 +76,12 @@ public class InvoicePayment
         this.amount = amount;
     }
 
-    public Integer getInvoiceId()
+    public Long getInvoiceId()
     {
         return invoiceId;
     }
 
-    public void setInvoiceId(Integer invoiceId)
+    public void setInvoiceId(Long invoiceId)
     {
         this.invoiceId = invoiceId;
     }

@@ -6,10 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -18,7 +14,7 @@ import java.util.Date;
 public class Invoice
 {
     @JsonProperty("id")
-    private Integer id;
+    private Long id;
 
     @JsonProperty("amount")
     private BigDecimal amount;
@@ -39,10 +35,10 @@ public class Invoice
     private Date periodStart;
 
     @JsonProperty("client_id")
-    private Integer clientId;
+    private Long clientId;
 
     @JsonProperty("subject")
-    private Integer subject;
+    private Long subject;
 
     @JsonProperty("currency")
     private String currency;
@@ -51,7 +47,7 @@ public class Invoice
     private Date issuedAt;
 
     @JsonProperty("created_by_id")
-    private Integer createdById;
+    private Long createdById;
 
     @JsonProperty("notes")
     private String notes;
@@ -87,13 +83,13 @@ public class Invoice
     private BigDecimal discount;
 
     @JsonProperty("recurring_invoice_id")
-    private Integer recurringInvoiceId;
+    private Long recurringInvoiceId;
 
     @JsonProperty("estimate_id")
-    private Integer estimateId;
+    private Long estimateId;
 
     @JsonProperty("retainer_id")
-    private Integer retainerId;
+    private Long retainerId;
 
     @JsonProperty("updated_at")
     private Date updatedAt;
@@ -117,12 +113,12 @@ public class Invoice
 
     }
 
-    public Integer getId()
+    public Long getId()
     {
         return id;
     }
 
-    public void setId(Integer id)
+    public void setId(Long id)
     {
         this.id = id;
     }
@@ -187,22 +183,22 @@ public class Invoice
         this.periodStart = periodStart;
     }
 
-    public Integer getClientId()
+    public Long getClientId()
     {
         return clientId;
     }
 
-    public void setClientId(Integer clientId)
+    public void setClientId(Long clientId)
     {
         this.clientId = clientId;
     }
 
-    public Integer getSubject()
+    public Long getSubject()
     {
         return subject;
     }
 
-    public void setSubject(Integer subject)
+    public void setSubject(Long subject)
     {
         this.subject = subject;
     }
@@ -227,12 +223,12 @@ public class Invoice
         this.issuedAt = issuedAt;
     }
 
-    public Integer getCreatedById()
+    public Long getCreatedById()
     {
         return createdById;
     }
 
-    public void setCreatedById(Integer createdById)
+    public void setCreatedById(Long createdById)
     {
         this.createdById = createdById;
     }
@@ -347,32 +343,32 @@ public class Invoice
         this.discount = discount;
     }
 
-    public Integer getRecurringInvoiceId()
+    public Long getRecurringInvoiceId()
     {
         return recurringInvoiceId;
     }
 
-    public void setRecurringInvoiceId(Integer recurringInvoiceId)
+    public void setRecurringInvoiceId(Long recurringInvoiceId)
     {
         this.recurringInvoiceId = recurringInvoiceId;
     }
 
-    public Integer getEstimateId()
+    public Long getEstimateId()
     {
         return estimateId;
     }
 
-    public void setEstimateId(Integer estimateId)
+    public void setEstimateId(Long estimateId)
     {
         this.estimateId = estimateId;
     }
 
-    public Integer getRetainerId()
+    public Long getRetainerId()
     {
         return retainerId;
     }
 
-    public void setRetainerId(Integer retainerId)
+    public void setRetainerId(Long retainerId)
     {
         this.retainerId = retainerId;
     }

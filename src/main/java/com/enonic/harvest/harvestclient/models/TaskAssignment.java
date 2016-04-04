@@ -3,9 +3,6 @@ package com.enonic.harvest.harvestclient.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -13,13 +10,13 @@ import java.util.Date;
 public class TaskAssignment
 {
     @JsonProperty("id")
-    private Integer id;
+    private Long id;
 
     @JsonProperty("project_id")
-    private Integer projectId;
+    private Long projectId;
 
     @JsonProperty("task_id")
-    private Integer taskId;
+    private Long taskId;
 
     @JsonProperty("billable")
     private boolean billable;
@@ -39,32 +36,32 @@ public class TaskAssignment
     @JsonProperty("created_at")
     private Date createdAt;
 
-    public Integer getId()
+    public Long getId()
     {
         return id;
     }
 
-    public void setId(Integer id)
+    public void setId(Long id)
     {
         this.id = id;
     }
 
-    public Integer getProjectId()
+    public Long getProjectId()
     {
         return projectId;
     }
 
-    public void setProjectId(Integer projectId)
+    public void setProjectId(Long projectId)
     {
         this.projectId = projectId;
     }
 
-    public Integer getTaskId()
+    public Long getTaskId()
     {
         return taskId;
     }
 
-    public void setTaskId(Integer taskId)
+    public void setTaskId(Long taskId)
     {
         this.taskId = taskId;
     }

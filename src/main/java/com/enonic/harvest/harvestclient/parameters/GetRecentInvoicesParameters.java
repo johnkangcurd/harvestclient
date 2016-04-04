@@ -9,5 +9,5 @@ public class GetRecentInvoicesParameters
     public Date toDate;
     public Date updatedSince;
     public String status;
-    public Integer client;
+    public Long client;
 }

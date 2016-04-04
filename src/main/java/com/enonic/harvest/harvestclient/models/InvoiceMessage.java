@@ -6,9 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import java.io.InputStream;
@@ -18,13 +15,13 @@ import java.util.Date;
 public class InvoiceMessage
 {
     @JsonProperty("id")
-    private Integer id;
+    private Long id;
 
     @JsonProperty("body")
     private String body;
 
     @JsonProperty("invoice_id")
-    private Integer invoiceId;
+    private Long invoiceId;
 
     @JsonProperty("send_me_a_copy")
     private boolean sendMeACopy;
@@ -65,12 +62,12 @@ public class InvoiceMessage
 
     }
 
-    public Integer getId()
+    public Long getId()
     {
         return id;
     }
 
-    public void setId(Integer id)
+    public void setId(Long id)
     {
         this.id = id;
     }
@@ -85,12 +82,12 @@ public class InvoiceMessage
         this.body = body;
     }
 
-    public Integer getInvoiceId()
+    public Long getInvoiceId()
     {
         return invoiceId;
     }
 
-    public void setInvoiceId(Integer invoiceId)
+    public void setInvoiceId(Long invoiceId)
     {
         this.invoiceId = invoiceId;
     }

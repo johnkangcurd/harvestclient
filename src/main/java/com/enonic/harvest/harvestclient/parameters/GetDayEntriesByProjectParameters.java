@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class GetDayEntriesByProjectParameters
 {
-    public Integer  projectId;
+    public Long  projectId;
     public Date fromDate;
     public Date toDate;
     public Date updatedSince;

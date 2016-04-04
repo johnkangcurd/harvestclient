@@ -1,18 +1,8 @@
 package com.enonic.harvest.harvestclient.models;
 
-import com.enonic.harvest.harvestclient.exceptions.HarvestClientException;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import java.io.InputStream;
 import java.util.Date;
 
 //@JsonRootName(value = "client")  // FIXME: 4/4/16 this is not working as expected
@@ -30,10 +20,10 @@ public class Client
     private Date updatedAt;
 
     @JsonProperty(value="highrise_id")
-    private Integer highriseId;
+    private Long highriseId;
 
     @JsonProperty(value="id")
-    private Integer id;
+    private Long id;
 
     @JsonProperty(value="cache_version")
     private Integer cacheVersion;
@@ -86,22 +76,22 @@ public class Client
         this.updatedAt = updatedAt;
     }
 
-    public Integer getHighriseId()
+    public Long getHighriseId()
     {
         return highriseId;
     }
 
-    public void setHighriseId(Integer highriseId)
+    public void setHighriseId(Long highriseId)
     {
         this.highriseId = highriseId;
     }
 
-    public Integer getId()
+    public Long getId()
     {
         return id;
     }
 
-    public void setId(Integer id)
+    public void setId(Long id)
     {
         this.id = id;
     }

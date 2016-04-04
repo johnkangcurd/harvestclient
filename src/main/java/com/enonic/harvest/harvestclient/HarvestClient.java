@@ -17,7 +17,7 @@ public interface HarvestClient
     List<User> getUsers(Date updatedSince)
             throws HarvestClientException;
 
-    User getUser(int id)
+    User getUser(long id)
             throws HarvestClientException;
 
     List<Client> getClients()
@@ -26,7 +26,7 @@ public interface HarvestClient
     List<Client> getClients(Date updatedSince)
             throws HarvestClientException;
 
-    Client getClient(int id)
+    Client getClient(long id)
             throws HarvestClientException;
 
     List<DayEntry> getDayEntriesByUser(GetDayEntriesByUserParameters params)
@@ -41,13 +41,13 @@ public interface HarvestClient
     List<Project> getProjects(Date updatedSince)
             throws HarvestClientException;
 
-    List<Project> getProjects(int clientId)
+    List<Project> getProjects(long clientId)
             throws HarvestClientException;
 
-    List<Project> getProjects(int clientId, Date updatedSince)
+    List<Project> getProjects(long clientId, Date updatedSince)
             throws HarvestClientException;
 
-    Project getProject(int id)
+    Project getProject(long id)
             throws HarvestClientException;
 
     List<Task> getTasks()
@@ -56,39 +56,39 @@ public interface HarvestClient
     List<Task> getTasks(Date updatedSince)
             throws HarvestClientException;
 
-    Task getTask(int id)
+    Task getTask(long id)
             throws HarvestClientException;
 
-    List<UserAssignment> getUserAssignments(int projectId)
+    List<UserAssignment> getUserAssignments(long projectId)
             throws HarvestClientException;
 
-    List<UserAssignment> getUserAssignments(int projectId, Date updatedSince)
+    List<UserAssignment> getUserAssignments(long projectId, Date updatedSince)
             throws HarvestClientException;
 
-    List<TaskAssignment> getTaskAssignments(int projectId)
+    List<TaskAssignment> getTaskAssignments(long projectId)
             throws HarvestClientException;
 
-    List<TaskAssignment> getTaskAssignments(int projectId, Date updatedSince)
+    List<TaskAssignment> getTaskAssignments(long projectId, Date updatedSince)
             throws HarvestClientException;
 
     List<Invoice> getRecentInvoices(GetRecentInvoicesParameters params)
             throws HarvestClientException;
 
-    Invoice getInvoice(int id)
+    Invoice getInvoice(long id)
             throws HarvestClientException;
 
     List<InvoiceItemCategory> getInvoiceItemCategories()
             throws  HarvestClientException;
 
-    List<InvoiceMessage> getInvoiceMessages(int invoiceId)
+    List<InvoiceMessage> getInvoiceMessages(long invoiceId)
             throws HarvestClientException;
 
-    InvoiceMessage getInvoiceMessage(int invoiceId, int id)
+    InvoiceMessage getInvoiceMessage(long invoiceId, long id)
             throws  HarvestClientException;
 
-    List<InvoicePayment> getInvoicePayments(int invoiceId)
+    List<InvoicePayment> getInvoicePayments(long invoiceId)
             throws HarvestClientException;
 
-    InvoicePayment getInvoicePayment(int invoiceId, int id)
+    InvoicePayment getInvoicePayment(long invoiceId, long id)
             throws HarvestClientException;
 }

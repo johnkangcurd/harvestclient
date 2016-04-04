@@ -58,7 +58,7 @@ class DefaultHarvestClient
         return response.readEntity(new GenericType<List<UserHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public User getUser(int id)
+    public User getUser(long id)
             throws HarvestClientException
     {
         final UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
@@ -99,7 +99,7 @@ class DefaultHarvestClient
         return response.readEntity(new GenericType<List<ClientHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public Client getClient(int id)
+    public Client getClient(long id)
             throws HarvestClientException
     {
         final UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
@@ -181,7 +181,7 @@ class DefaultHarvestClient
         return response.readEntity(new GenericType<List<ProjectHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public List<Project> getProjects(int clientId)
+    public List<Project> getProjects(long clientId)
             throws HarvestClientException
     {
         final UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
@@ -193,7 +193,7 @@ class DefaultHarvestClient
         return response.readEntity(new GenericType<List<ProjectHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public List<Project> getProjects(int clientId, Date updatedSince)
+    public List<Project> getProjects(long clientId, Date updatedSince)
             throws HarvestClientException
     {
         final UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
@@ -207,7 +207,7 @@ class DefaultHarvestClient
 
     }
 
-    public Project getProject(int id)
+    public Project getProject(long id)
             throws HarvestClientException
     {
         final UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
@@ -218,7 +218,7 @@ class DefaultHarvestClient
         return response.readEntity(Project.class);
     }
 
-    public List<UserAssignment> getUserAssignments(int projectId)
+    public List<UserAssignment> getUserAssignments(long projectId)
             throws HarvestClientException
     {
         final UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
@@ -229,7 +229,7 @@ class DefaultHarvestClient
         return response.readEntity(new GenericType<List<UserAssigmentHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public List<UserAssignment> getUserAssignments(int projectId, Date updatedSince)
+    public List<UserAssignment> getUserAssignments(long projectId, Date updatedSince)
             throws HarvestClientException
     {
         final UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
@@ -264,7 +264,7 @@ class DefaultHarvestClient
         return response.readEntity(new GenericType<List<TaskHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public Task getTask(int id)
+    public Task getTask(long id)
             throws HarvestClientException
     {
         final UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
@@ -275,7 +275,7 @@ class DefaultHarvestClient
         return response.readEntity(Task.class);
     }
 
-    public List<TaskAssignment> getTaskAssignments(int projectId)
+    public List<TaskAssignment> getTaskAssignments(long projectId)
             throws HarvestClientException
     {
         UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
@@ -286,7 +286,7 @@ class DefaultHarvestClient
         return response.readEntity(new GenericType<List<TaskAssignmentHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public List<TaskAssignment> getTaskAssignments(int projectId, Date updatedSince)
+    public List<TaskAssignment> getTaskAssignments(long projectId, Date updatedSince)
             throws HarvestClientException
     {
         UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
@@ -323,7 +323,7 @@ class DefaultHarvestClient
         return response.readEntity(new GenericType<List<InvoiceHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public Invoice getInvoice(int id)
+    public Invoice getInvoice(long id)
             throws HarvestClientException
     {
         UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
@@ -346,7 +346,7 @@ class DefaultHarvestClient
         return response.readEntity(new GenericType<List<InvoiceItemCategoryHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public List<InvoiceMessage> getInvoiceMessages(int invoiceId)
+    public List<InvoiceMessage> getInvoiceMessages(long invoiceId)
             throws HarvestClientException
     {
         UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
@@ -357,7 +357,7 @@ class DefaultHarvestClient
         return response.readEntity(new GenericType<List<InvoiceMessageHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public InvoiceMessage getInvoiceMessage(int invoiceId, int id)
+    public InvoiceMessage getInvoiceMessage(long invoiceId, long id)
             throws  HarvestClientException
     {
         UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
@@ -368,7 +368,7 @@ class DefaultHarvestClient
         return response.readEntity(InvoiceMessage.class);
     }
 
-    public List<InvoicePayment> getInvoicePayments(int invoiceId)
+    public List<InvoicePayment> getInvoicePayments(long invoiceId)
             throws HarvestClientException
     {
         UriBuilder builder = UriBuilder.fromUri(getBaseUrl())
@@ -379,7 +379,7 @@ class DefaultHarvestClient
         return response.readEntity(new GenericType<List<InvoicePaymentHolder>>(){}).stream().map(Holder :: getEntity).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public InvoicePayment getInvoicePayment(int invoiceId, int id)
+    public InvoicePayment getInvoicePayment(long invoiceId, long id)
             throws HarvestClientException
     {
         UriBuilder builder = UriBuilder.fromUri(getBaseUrl())

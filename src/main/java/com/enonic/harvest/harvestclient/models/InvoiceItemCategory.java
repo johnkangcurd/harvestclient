@@ -6,10 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.io.InputStream;
 import java.util.Date;
 
@@ -17,7 +13,7 @@ import java.util.Date;
 public class InvoiceItemCategory
 {
     @JsonProperty("id")
-    private Integer id;
+    private Long id;
 
     @JsonProperty("name")
     private String name;
@@ -50,12 +46,12 @@ public class InvoiceItemCategory
 
     }
 
-    public Integer getId()
+    public Long getId()
     {
         return id;
     }
 
-    public void setId(Integer id)
+    public void setId(Long id)
     {
         this.id = id;
     }
