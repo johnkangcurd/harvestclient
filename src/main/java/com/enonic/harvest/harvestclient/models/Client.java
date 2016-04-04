@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.InputStream;
 import java.util.Date;
 
-//@JsonRootName(value = "client")  //this is not working as expected
+//@JsonRootName(value = "client")  // FIXME: 4/4/16 this is not working as expected
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Client
 {
