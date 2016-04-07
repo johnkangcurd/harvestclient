@@ -32,6 +32,9 @@ public class User
     @JsonProperty("default_hourly_rate")
     private BigDecimal defaultHourlyRate;
 
+    @JsonProperty("cost_rate")
+    private BigDecimal costRate;
+
     @JsonProperty("is_active")
     private boolean isActive;
 
@@ -185,6 +188,14 @@ public class User
     public void setCreatedAt(Date createdAt)
     {
         this.createdAt = createdAt;
+    }
+
+    public BigDecimal getCostRate() {
+        return costRate;
+    }
+
+    public void setCostRate(BigDecimal costRate) {
+        this.costRate = costRate;
     }
 
     public String getEmail()
