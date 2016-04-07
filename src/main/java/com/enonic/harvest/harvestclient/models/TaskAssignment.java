@@ -27,7 +27,7 @@ public class TaskAssignment
     @JsonProperty("budget")
     private BigDecimal budget;
 
-    @JsonProperty("hourlyRate")
+    @JsonProperty("hourly_rate")
     private BigDecimal hourlyRate;
 
     @JsonProperty("updated_at")
