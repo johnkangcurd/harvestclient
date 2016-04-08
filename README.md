@@ -1,6 +1,8 @@
 # HarvestClient 2.0
 
-This is a fork from dmmikkel's harvest client.  In contrast this uses the Harvest JSON api (using Jax RS and Jackson/Jersey now) vs XML and also won't run into issues with empty datasets being returned from your queries to harvest.  It also does away with the  xxxCollection types that wrapped lists.  Now, you just deal with Java collections!
+This is a fork from dmmikkel's harvest client.  In contrast this uses the Harvest JSON api (using Jax RS and Jackson/Jersey now) vs XML and also won't run into issues with empty datasets being returned from your queries to harvest.  It also does away with the  xxxCollection types that wrapped lists.  Now, you just deal with Java collections!  
+
+### ***Please note that 2.0 uses Java 8!***
 
 HarvestClient is an easy to use wrapper for the Harvest API.
 
