@@ -26,7 +26,7 @@ public class Client
     private Long id;
 
     @JsonProperty(value="cache_version")
-    private Integer cacheVersion;
+    private Long cacheVersion;
 
     @JsonProperty(value="currency")
     private String currency;
@@ -96,12 +96,12 @@ public class Client
         this.id = id;
     }
 
-    public Integer getCacheVersion()
+    public Long getCacheVersion()
     {
         return cacheVersion;
     }
 
-    public void setCacheVersion(Integer cacheVersion)
+    public void setCacheVersion(Long cacheVersion)
     {
         this.cacheVersion = cacheVersion;
     }
