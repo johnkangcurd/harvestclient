@@ -1,10 +1,12 @@
 package com.enonic.harvest.harvestclient.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.TimeZone;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -24,7 +26,7 @@ public class DayEntry
     private Long projectId;
 
     @JsonProperty(value = "spent_at")
-    private Date spentAt;
+    private String spentAt;
 
     @JsonProperty(value = "task_id")
     private Long taskId;
@@ -104,12 +106,12 @@ public class DayEntry
         this.projectId = projectId;
     }
 
-    public Date getSpentAt()
+    public String getSpentAt()
     {
         return spentAt;
     }
 
-    public void setSpentAt(Date spentAt)
+    public void setSpentAt(String spentAt)
     {
         this.spentAt = spentAt;
     }
